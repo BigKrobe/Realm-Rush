@@ -24,6 +24,8 @@ public class CubeEditor : MonoBehaviour
         transform.position = new Vector3(snapPos.x, 0f, snapPos.z);
 
         _textMesh = GetComponentInChildren<TextMesh>();
-        _textMesh.text = snapPos.x / _gridSize + ", " + snapPos.z / _gridSize;
+        string labelText = snapPos.x / _gridSize + ", " + snapPos.z / _gridSize;
+        _textMesh.text = labelText;
+        gameObject.name = labelText;
     }
 }

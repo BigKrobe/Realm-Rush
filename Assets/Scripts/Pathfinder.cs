@@ -10,6 +10,7 @@ public class Pathfinder : MonoBehaviour
     Dictionary<Vector2Int, Waypoint> grid = new Dictionary<Vector2Int, Waypoint>();
     Queue<Waypoint> queue = new Queue<Waypoint>();
     bool _isRunning = true;
+    Waypoint searchCenter;
 
     Vector2Int[] directions =
     {
@@ -33,37 +34,53 @@ public class Pathfinder : MonoBehaviour
 
         queue.Enqueue(_startWaypoint);
 
-        while (queue.Count > 0)
+        while (queue.Count > 0 && _isRunning)
         {
-            var searchCenter = queue.Dequeue();
-            print("Searching from " + searchCenter); // todo remove log
-            HaltIfEndFound(searchCenter);
+            searchCenter = queue.Dequeue();
+            searchCenter._isExplored = true;
+            HaltIfEndFound();
+            ExploreNeighbours();
         }
         print("Finished pathfinding?");
     }
 
-    private void HaltIfEndFound(Waypoint searchCenter)
+    private void HaltIfEndFound()
     {
         if (searchCenter == _endWaypoint)
         {
-            print("Searching from end node, stopping"); // todo remove log
             _isRunning = false;
         }
     }
 
     private void ExploreNeighbours()
     {
+        if (!_isRunning) { return; }
+
         foreach (Vector2Int direction in directions)
         {
-            Vector2Int explorationCoordinates = _startWaypoint.GetGridPos() + direction;
+            Vector2Int neighbourCoordinates = searchCenter.GetGridPos() + direction;
             try
             {
-                grid[explorationCoordinates].SetTopColor(Color.cyan);
+                QueueNewNeighbours(neighbourCoordinates);
             }
             catch
             {
-                print("Skipping " + explorationCoordinates);
+                // do nothing
             }
+        }
+    }
+
+    private void QueueNewNeighbours(Vector2Int neighbourCoordinates)
+    {
+        Waypoint neighbour = grid[neighbourCoordinates];
+        if (neighbour._isExplored  || queue.Contains(neighbour))
+        {
+            // do nothing
+        }
+        else
+        {
+            queue.Enqueue(neighbour);
+            neighbour.exploredFrom = searchCenter;
         }
     }
 

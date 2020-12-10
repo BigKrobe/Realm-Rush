@@ -19,7 +19,7 @@ public class Waypoint : MonoBehaviour
     {
         if (_isExplored == true)
         {
-            SetTopColor(exploredColor);
+        //   SetTopColor(exploredColor);
         }       
 
     }

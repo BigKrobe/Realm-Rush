@@ -11,6 +11,7 @@ public class Pathfinder : MonoBehaviour
     Queue<Waypoint> queue = new Queue<Waypoint>();
     bool _isRunning = true;
     Waypoint searchCenter;
+    List<Waypoint> path = new List<Waypoint>(); 
 
     Vector2Int[] directions =
     {
@@ -20,16 +21,31 @@ public class Pathfinder : MonoBehaviour
         Vector2Int.left
     };
 
-    // Start is called before the first frame update
-    void Start()
+    public List<Waypoint> GetPath()
     {
         LoadBlocks();
         ColorStartAndEnd();
-        Pathfind();
-        //ExploreNeighbours();
+        BreadthFirstSearch();
+        CreatePath();
+        return path;
     }
 
-    private void Pathfind()
+    private void CreatePath()
+    {
+        path.Add(_endWaypoint);
+
+        Waypoint previous = _endWaypoint.exploredFrom;
+        while (previous != _startWaypoint)
+        {
+            path.Add(previous);
+            previous = previous.exploredFrom;
+        }
+
+        path.Add(_startWaypoint);
+        path.Reverse();
+    }
+
+    private void BreadthFirstSearch()
     {
 
         queue.Enqueue(_startWaypoint);
@@ -59,13 +75,9 @@ public class Pathfinder : MonoBehaviour
         foreach (Vector2Int direction in directions)
         {
             Vector2Int neighbourCoordinates = searchCenter.GetGridPos() + direction;
-            try
+            if (grid.ContainsKey(neighbourCoordinates))
             {
                 QueueNewNeighbours(neighbourCoordinates);
-            }
-            catch
-            {
-                // do nothing
             }
         }
     }

@@ -11,8 +11,6 @@ public class EnemyMovement : MonoBehaviour
         StartCoroutine(FollowPath(path));
     }
 
-
-
     IEnumerator FollowPath(List<Waypoint> path)
     {
         print("Starting patrol...");

@@ -12,7 +12,6 @@ public class EnemySpawner : MonoBehaviour
     void Start()
     {
         StartCoroutine(SpawnEnemy());
-        
     }
 
     // Update is called once per frame
@@ -25,7 +24,7 @@ public class EnemySpawner : MonoBehaviour
     {
         for (int i = _enemiesToSpawn; i > 0; i--) 
         {
-            Instantiate(_enemyPrefab, transform.parent);
+            Instantiate(_enemyPrefab, transform.position, Quaternion.identity);
             yield return new WaitForSeconds(_secondsBetweenSpawns);
         }
     }

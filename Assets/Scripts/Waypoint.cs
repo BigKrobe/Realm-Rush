@@ -8,16 +8,12 @@ public class Waypoint : MonoBehaviour
 
     // public ok here as is a data class
     public bool _isExplored = false;
-    public Waypoint exploredFrom; 
+    public Waypoint exploredFrom;
+    public bool _isPlaceable = true;
 
     Vector2Int _gridPos;
 
     const int _gridSize = 10;
-
-    void OnMouseOver()
-    {
-        Debug.Log("Mouse is over: " + gameObject.name);
-    }
 
     public int GetGridSize()
     {
@@ -31,7 +27,24 @@ public class Waypoint : MonoBehaviour
             Mathf.RoundToInt(transform.position.z / _gridSize)
         );
     }
-
+    void OnMouseOver()
+    {
+        if (Input.GetMouseButtonDown(0))
+        {
+            if (_isPlaceable) 
+            {
+                Debug.Log("Placing tower on: " + gameObject.name); 
+            }
+            if (!_isPlaceable)
+            {
+                Debug.Log("Block " + gameObject.name + " is part of the path!");
+            }
+            else 
+            {
+                return;
+            }
+        }
+    }
 }
 
 

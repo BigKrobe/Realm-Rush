@@ -154,9 +154,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c5a8d44b35b86d449d444c5b044395e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  exploredColor: {r: 0, g: 0, b: 0, a: 0}
   _isExplored: 0
   exploredFrom: {fileID: 0}
+  _isPlaceable: 1
+  _towerPrefab: {fileID: 590750988, guid: c8599ea73791fba449e5c2d04811f14d, type: 3}
 --- !u!65 &691244980533447946
 BoxCollider:
   m_ObjectHideFlags: 0

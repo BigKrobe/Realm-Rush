@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class Waypoint : MonoBehaviour
 {
-    [SerializeField] Color exploredColor;
-
     // public ok here as is a data class
     public bool _isExplored = false;
     public Waypoint exploredFrom;
     public bool _isPlaceable = true;
+
+    [SerializeField] Tower _towerPrefab;
 
     Vector2Int _gridPos;
 
@@ -33,11 +33,12 @@ public class Waypoint : MonoBehaviour
         {
             if (_isPlaceable) 
             {
-                Debug.Log("Placing tower on: " + gameObject.name); 
+                Instantiate(_towerPrefab, transform.position, Quaternion.identity);
+                _isPlaceable = false;
             }
             if (!_isPlaceable)
             {
-                Debug.Log("Block " + gameObject.name + " is part of the path!");
+                { return; }
             }
             else 
             {

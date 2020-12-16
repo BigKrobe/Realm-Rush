@@ -6,31 +6,50 @@ public class TowerFactory : MonoBehaviour
 {
     [SerializeField] Tower _towerPrefab;
     [SerializeField] int _towerLimit = 5;
+    [SerializeField] GameObject _towerParent;
 
-    int towersPlaced = 0;
+    Queue<Tower> _towerQueue = new Queue<Tower>();
+    // create an empty queue of towers
 
     public void AddTower(Waypoint baseWaypoint)
     {
-        
-        if (towersPlaced < _towerLimit)
+        int numTowers = _towerQueue.Count;
+
+        if (numTowers < _towerLimit)
         {
             InstantiateNewTower(baseWaypoint);
         }
         else
         {
-            MoveExistingTower();
+            MoveExistingTower(baseWaypoint);
         }
-    }
-
-    private static void MoveExistingTower()
-    {
-        print("No more towers may be placed!");
     }
 
     private void InstantiateNewTower(Waypoint baseWaypoint)
     {
-        Instantiate(_towerPrefab, baseWaypoint.transform.position, Quaternion.identity);
+        var newTower = Instantiate(_towerPrefab, baseWaypoint.transform.position, Quaternion.identity);
+        newTower.transform.parent = _towerParent.transform;
         baseWaypoint._isPlaceable = false;
-        towersPlaced++;
+
+        // set the baseWaypoints
+        newTower._baseWaypoint = baseWaypoint;
+        baseWaypoint._isPlaceable = false;
+
+        _towerQueue.Enqueue(newTower);
+
+    }
+
+    private void MoveExistingTower(Waypoint newBaseWaypoint)
+    {
+        var oldTower = _towerQueue.Dequeue();
+
+        oldTower._baseWaypoint._isPlaceable = true;
+        newBaseWaypoint._isPlaceable = false;
+
+        oldTower._baseWaypoint = newBaseWaypoint;
+
+        oldTower.transform.position = newBaseWaypoint.transform.position;
+
+        _towerQueue.Enqueue(oldTower);
     }
 }
